@@ -11,6 +11,7 @@ public:
 	~Background();
 
 	void setBabyBroPoisition(float x, float y);
+	sf::Vector2f getBabyBroPosition()
 	void drawBackground(sf::RenderWindow &window);
 
 private:
@@ -40,6 +41,11 @@ Background::~Background()
 void Background::setBabyBroPoisition(float x, float y)
 {
 	babybro.setPosition(x, y);
+}
+
+sf::Vector2f Background::getBabyBroPosition()
+{
+	return babybro.getPosition();
 }
 
 void Background::drawBackground(sf::RenderWindow &window)
