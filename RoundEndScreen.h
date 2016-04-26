@@ -13,4 +13,6 @@ private:
 	sf::Text winLoseText;
 	sf::Text KillsText;
 	sf::Text LivesText;
+	
+	void initializeText(sf::Font &font, sf::Text &text, float x_position, float y_position, int size = 50);
 };
