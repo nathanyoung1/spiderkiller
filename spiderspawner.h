@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "spiderstructure.h"
-#include<time.h>
+#include <time.h>
 
 
 
@@ -15,13 +15,13 @@ public:
 	void movespiders();
 	void drawspiders(sf::RenderWindow &window);
 	void killspider(int i);
+	void purge();
 
 	void thechallenge(sf::Clock &timer, int round);
 
-	void push();
-	void pop();
+	void push(int i);
+	void pop(int i);
 private:
 	spider *pHead;
-	spider *pTail;
 	int size;
 };
