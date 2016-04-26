@@ -3,6 +3,7 @@
 #include"spiderspawner.h"
 #include"Background.h"
 #include"ScoreBar.h"
+#include "RoundEndScreen.h"
 #include<time.h>
 
 using std::cout;
@@ -19,6 +20,7 @@ int main() {
 	spiderspawner test;
 	Background backdrop;
 	ScoreBar score;
+	RoundEndScreen roundEnd;
 
 
 	while (window.isOpen()) {
@@ -42,6 +44,28 @@ int main() {
 		score.drawScoreBar(window, clock);
 		test.drawspiders(window);
 		window.display();
+		
+		//MICHELLE (This is what I changed for the end of round screen)
+		window.clear();
+		//check for the end of the round
+		if (clock.getElapsedTime().asMilliseconds() >= 30500 || score.getLives() == 0)
+		{
+			//end of the round
+			roundEnd.drawRoundEndScreen(window, score.getHits(), score.getLives());
+		}
+		else
+		{
+			test.movespiders();
+		
+			test.thechallenge(clock, 1);
+
+			backdrop.drawBackground(window);
+			score.drawScoreBar(window, clock);
+			test.drawspiders(window);
+			window.display();
+		}
+		window.display();
+		//END OF MICHELLE
 	}
 
 }
