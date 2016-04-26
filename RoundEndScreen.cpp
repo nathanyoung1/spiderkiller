@@ -53,3 +53,12 @@ void RoundEndScreen::drawRoundEndScreen(sf::RenderWindow &window, int kills, int
 	window.draw(KillsText);
 	window.draw(LivesText);
 }
+//private function to initialize the text easier
+//precondition: the Font must have opened correctly
+void RoundEndScreen::initializeText(sf::Font &font, sf::Text &text, float x_position, float y_position, int size)
+{
+	text.setFont(font);
+	text.setCharacterSize(size);
+	text.setPosition(x_position, y_position);
+	text.setColor(sf::Color::White);
+}
