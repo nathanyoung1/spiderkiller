@@ -13,10 +13,15 @@ public:
 
 	void spawnspiders(int howmany);
 	void movespiders();
-
-	spider getspider(int i);
-	
+	void drawspiders(sf::RenderWindow &window);
 	void killspider(int i);
+
+	void thechallenge(sf::Clock &timer, int round);
+
+	void push();
+	void pop();
 private:
-	spider charlotte[10];
+	spider *pHead;
+	spider *pTail;
+	int size;
 };
