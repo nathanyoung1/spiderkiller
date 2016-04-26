@@ -1,11 +1,10 @@
 #include"spiderstructure.h"
 
 
-spider::spider()
+spider::spider(int nid)
 {
-	
+	id = nid;
 	pNext = nullptr;
-	pLast = nullptr;
 
 
 	if (!tit.loadFromFile("spider.png"))
@@ -53,4 +52,14 @@ void spider::setnext(spider *next)
 spider* spider::getprev()
 {
 	return pLast;
+}
+
+void spider::setprev(spider* prev)
+{
+	pLast = prev;
+}
+
+int spider::getid()
+{
+	return id;
 }
