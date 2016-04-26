@@ -5,19 +5,22 @@
 spiderspawner::spiderspawner()
 {
 	pHead = nullptr;
-	pTail = nullptr;
 	size = 0;
 }
 spiderspawner::~spiderspawner()
-{}
+{
+	this->purge();
+}
 
 void spiderspawner::spawnspiders(int howmany)
 {
 	int i = 0;
 
 	for (i = 0; i < howmany; i++)
-		push();
-	size = size + howmany;
+	{
+		this->push(size);
+		size++;
+	}
 }
 
 void spiderspawner::movespiders()
@@ -28,9 +31,9 @@ void spiderspawner::movespiders()
 	{
 		if (pWalk->getPosition().y < 650)
 			pWalk->setposition(float(pWalk->getPosition().x), float(pWalk->getPosition().y) + 0.1);
-		else if (pWalk->getPosition().y >= 650 && pWalk->getPosition().x < 433)
+		else if (pWalk->getPosition().y >= 650 && pWalk->getPosition().x < 360)
 			pWalk->setposition(float(pWalk->getPosition().x) + 0.1, float(pWalk->getPosition().y));
-		else if (pWalk->getPosition().y >= 650 && pWalk->getPosition().x > 490)
+		else if (pWalk->getPosition().y >= 650 && pWalk->getPosition().x > 480)
 			pWalk->setposition(float(pWalk->getPosition().x) - 0.1, float(pWalk->getPosition().y));
 		pWalk = pWalk->getnext();
 	}
@@ -38,7 +41,7 @@ void spiderspawner::movespiders()
 
 void spiderspawner::killspider(int i)
 {
-	this->pop();
+	this->pop(i);
 }
 
 void spiderspawner::thechallenge(sf::Clock &timer, int round)
@@ -106,7 +109,7 @@ void spiderspawner::thechallenge(sf::Clock &timer, int round)
 		this->spawnspiders(challenge + 4);
 		break;
 	case 16000:
-		this->spawnspiders(challenge + 5);
+		this->spawnspiders(challenge + 3);
 		break;
 	case 17000:
 		this->spawnspiders(challenge);
@@ -115,57 +118,46 @@ void spiderspawner::thechallenge(sf::Clock &timer, int round)
 		this->spawnspiders(challenge + 3);
 		break;
 	case 19000:
-		this->spawnspiders(challenge + 3);
+		this->spawnspiders(challenge + 2);
 		break;
 	case 20000:
 		this->spawnspiders(challenge + 3);
 		break;
 	case 21000:
-		this->spawnspiders(challenge + 3);
+		this->spawnspiders(challenge + 2);
 		break;
 	case 22000:
 		this->spawnspiders(challenge);
 		break;
 	case 23000:
-		this->spawnspiders(challenge);
-		break;
-	case 24000:
 		this->spawnspiders(challenge + 4);
-		break;
-	case 25000:
-		this->spawnspiders(challenge + 3);
-		break;
-	case 26000:
-		this->spawnspiders(challenge + 4);
-		break;
-	case 27000:
-		this->spawnspiders(challenge + 3);
-		break;
-	case 28000:
-		this->spawnspiders(challenge + 4);
-		break;
-	case 29000:
-		this->spawnspiders(challenge + 3);
 		break;
 	default:
 		break;
 	}
 }
 
-void spiderspawner::push()
+void spiderspawner::push(int i)
 {
-	spider *pMem = new spider();
+	spider *pMem = new spider(i);
 	int x;
-	//srand((unsigned int)time(NULL));
 	pMem->setposition(rand() % 960, -50);
 	pMem->setnext(pHead);
 	pHead = pMem;
 }
-void spiderspawner::pop()
+void spiderspawner::pop(int i)
 {
-	spider *pMem = pTail;
-	pTail = pMem->getprev();
-	delete pMem;
+	spider *pWalk = pHead, *pTemp, *pAft;
+	int j = 0;
+	while (pWalk->getid() != i)
+	{
+		pWalk = pWalk->getnext();
+	}
+	pTemp = pWalk->getprev();
+	pTemp->setnext(pWalk->getnext());
+	pAft = pWalk->getnext();
+	pAft->setprev(pWalk->getprev());
+	delete pWalk;
 }
 
 void spiderspawner::drawspiders(sf::RenderWindow &window)
@@ -176,5 +168,17 @@ void spiderspawner::drawspiders(sf::RenderWindow &window)
 	{
 		pWalk->draw(window);
 		pWalk = pWalk->getnext();
+	}
+}
+
+void spiderspawner::purge()
+{
+	spider* pWalk = pHead, *pAft;
+	int i = 0;
+	for (i = 0; i < size; i++)
+	{
+		pAft = pWalk;
+		pWalk = pWalk->getnext();
+		delete pWalk;
 	}
 }
