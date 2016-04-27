@@ -9,9 +9,9 @@ spiderspawner::spiderspawner()
 	mspiderRemaining = 0;
 }
 spiderspawner::~spiderspawner()
- {
+{
 	this->purge();
-	}
+}
 
 void spiderspawner::spawnspiders(int howmany)
 {
@@ -21,14 +21,14 @@ void spiderspawner::spawnspiders(int howmany)
 	{
 		this->push(size);
 		size++;
-		 ++mspiderRemaining;
+		++mspiderRemaining;
 	}
 }
 
-void spiderspawner::movespiders()
+int spiderspawner::movespiders()
 {
-	spider *pWalk = pHead;
-	int i;
+	spider *pWalk = pHead, *pTemp;
+	int i, j = 0;
 	for (i = 0; i < mspiderRemaining; i++)
 	{
 		if (pWalk->getPosition().y < 650)
@@ -37,8 +37,18 @@ void spiderspawner::movespiders()
 			pWalk->setposition(float(pWalk->getPosition().x) + 0.1, float(pWalk->getPosition().y));
 		else if (pWalk->getPosition().y >= 650 && pWalk->getPosition().x > 480)
 			pWalk->setposition(float(pWalk->getPosition().x) - 0.1, float(pWalk->getPosition().y));
+		else if (pWalk->getPosition().y >= 650 && pWalk->getPosition().x < 480 && pWalk->getPosition().x > 360)
+		{
+			j++;
+			pTemp = pWalk;
+			if (pWalk != pHead)
+				pWalk = pWalk->getprev();
+			killspider(pTemp->getid());
+			mspiderRemaining--;
+		}
 		pWalk = pWalk->getnext();
 	}
+	return j;
 }
 void spiderspawner::killspider(int i)
 {
@@ -142,16 +152,17 @@ void spiderspawner::thechallenge(sf::Clock &timer, int round)
 void spiderspawner::push(int i)
 {
 	spider *pMem = new spider(i);
-	int x;
 	pMem->setposition(rand() % 800, -50);
 	pMem->setnext(pHead);
-	pHead->setprev(pMem);
+	if (pHead != nullptr)
+	{
+		pHead->setprev(pMem);
+	}
 	pHead = pMem;
 }
 void spiderspawner::pop(int i)
 {
 	spider *pWalk = pHead, *pTemp, *pAft;
-	int j = 0;
 	while ((pWalk != nullptr) && (pWalk->getid() != i))
 	{
 		pWalk = pWalk->getnext();
@@ -211,12 +222,14 @@ void spiderspawner::drawspiders(sf::RenderWindow &window)
 
 void spiderspawner::purge()
 {
-	spider* pWalk = pHead, *pAft;
+	spider *pWalk = pHead, *pAft;
 	int i = 0;
-	for (i = 0; i < size; i++)
+	while (pWalk != nullptr)
 	{
 		pAft = pWalk;
 		pWalk = pWalk->getnext();
-		delete pWalk;
+		delete pAft;
+		mspiderRemaining--;
 	}
+	pHead = nullptr;
 }
