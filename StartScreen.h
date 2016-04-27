@@ -8,7 +8,7 @@ public:
 	StartScreen(sf::RenderWindow &window);
 	~StartScreen();
 
-	void drawStartScreen(sf::RenderWindow &window);
+	void drawStartScreen(sf::RenderWindow &window, int level);
 private:
 	sf::Font font;
 	sf::Text text;
