@@ -19,10 +19,6 @@ using std::endl;
 int const shoeWidth = 10;				// shoe size
 int const shoeLength = 10;
 
-// ****** SPIDER CONSTANTS
-int const spiderWidth = 100;			// spinder png size (note, I lowered the size of the target area to make it more challenging and "realistic"
-int const spiderLength = 90;
-
 int main() {
 
 	sf::RenderWindow window(sf::VideoMode(960, 720), "Spider Killer!!!");
@@ -30,12 +26,14 @@ int main() {
 	srand((unsigned int)time(NULL));
 	int i;
 	sf::Clock clock;
+	sf::Clock splatTimer;
 
 	Shoe testShoe;
 	spiderspawner test;
 	Background backdrop;
 	ScoreBar score;
 	bool splat;
+	bool splat1 = false;
 	int kills = 0;
 
 	// velocity of shoe (in x and y direction)
@@ -56,15 +54,16 @@ int main() {
 		{
 			if (event.type == sf::Event::MouseButtonPressed) {
 				// when button pressed, sets shoe's position.  this is OFFSET by 1/2 shoe length and width BECAUSE the center of the shoe should be positioned to where you clicked on screen
-				testShoe.setPosition(sf::Mouse::getPosition(window).x - (shoeWidth / 2),
-					sf::Mouse::getPosition(window).y - (shoeLength / 2));
-				splat = collisionDetection(test, testShoe);
-				testShoe.setPosition(-100, -100);
-
+				testShoe.setPosition((float)(sf::Mouse::getPosition(window).x - (shoeWidth / 2)),
+					(float)(sf::Mouse::getPosition(window).y - (shoeLength / 2)));
+				splat = collisionDetection(test, testShoe);	// returns TRUE of collision of shoe with spider occurs.
+				splat1 = splat;								// splat 1 is used to test if we display splat (see below)
+				splatTimer.restart();
 			}
 
-			if (event.type == sf::Event::Closed)
+			if (event.type == sf::Event::Closed) {
 				window.close();
+			}
 		}
 
 		test.movespiders();
@@ -81,14 +80,20 @@ int main() {
 		backdrop.drawBackground(window);
 		score.drawScoreBar(window, clock);
 		test.drawspiders(window);
-		window.draw(testShoe);
-
-		//if (clock.getElapsedTime() < time) {
-		//	window.draw(shoe);
-		//}
-
-
+		
+		// this is reposnisble for displaying the splat.  splat stays up for 2 seconds OR until it gets clicked again
+		if (splat1 == true) {
+			if (splatTimer.getElapsedTime().asSeconds() < 2) {
+				testShoe.setSpritePosition(testShoe.getPosition());
+				testShoe.drawSplat(window);
+			}
+			else
+			{
+					splat1 = false;
+			}
+		}
 		window.display();
+
 	}
 
 }
