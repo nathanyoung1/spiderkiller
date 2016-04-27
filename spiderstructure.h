@@ -5,13 +5,13 @@
 using std::cout;
 
 
-class spider
+class spider : public sf::RectangleShape
 {
 public:
-	
+
 	spider(int nid);
 	~spider();
-	
+
 	void move(float offsetX, float offsetY);
 	void setposition(float positionX, float positiony);
 	sf::Vector2f getPosition();

@@ -6,11 +6,11 @@ ScoreBar::ScoreBar()
 	font.loadFromFile("holojacketcond.ttf");
 	lives = 3;
 	hits = 0;
-	
+
 	timer.setFont(font);
 	timer.setPosition(700, 5);
 	timer.setCharacterSize(50);
-	
+
 	livesText.setFont(font);
 	livesText.setPosition(50, 5);
 	livesText.setCharacterSize(50);
@@ -45,7 +45,7 @@ int ScoreBar::getLives()
 //Adds one to the kill count
 void ScoreBar::addHit()
 {
-	hits = hits + 1; 
+	hits = hits + 1;
 }
 //Subtracts one from the Life counter until life is equal to zero
 void ScoreBar::takeLife()

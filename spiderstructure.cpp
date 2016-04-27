@@ -12,6 +12,12 @@ spider::spider(int nid)
 	else
 		it.setTexture(tit);
 	it.setPosition(-50, -50);
+
+sf::Vector2f size(100, 90);
+sf::Vector2f position(-50, -50);
+
+	setSize(size);
+	setPosition(position);
 }
 spider::~spider()
 {}
@@ -25,6 +31,9 @@ void spider::move(float offsetX, float offsetY)
 void spider::setposition(float positionx, float positiony)
 {
 	it.setPosition(positionx, positiony);
+	sf::Vector2f position(positionx, positiony);
+	setPosition(position);
+
 }
 
 spider* spider::getnext()

@@ -1,16 +1,17 @@
 #include"spiderspawner.h"
-
+#include "shoe.h"
 
 
 spiderspawner::spiderspawner()
 {
 	pHead = nullptr;
 	size = 0;
+	mspiderRemaining = 0;
 }
 spiderspawner::~spiderspawner()
-{
+ {
 	this->purge();
-}
+	}
 
 void spiderspawner::spawnspiders(int howmany)
 {
@@ -20,6 +21,7 @@ void spiderspawner::spawnspiders(int howmany)
 	{
 		this->push(size);
 		size++;
+		 ++mspiderRemaining;
 	}
 }
 
@@ -27,7 +29,7 @@ void spiderspawner::movespiders()
 {
 	spider *pWalk = pHead;
 	int i;
-	for (i = 0; i < size; i++)
+	for (i = 0; i < mspiderRemaining; i++)
 	{
 		if (pWalk->getPosition().y < 650)
 			pWalk->setposition(float(pWalk->getPosition().x), float(pWalk->getPosition().y) + 0.1);
@@ -38,11 +40,11 @@ void spiderspawner::movespiders()
 		pWalk = pWalk->getnext();
 	}
 }
-
 void spiderspawner::killspider(int i)
 {
 	this->pop(i);
 }
+
 
 void spiderspawner::thechallenge(sf::Clock &timer, int round)
 {
@@ -141,30 +143,66 @@ void spiderspawner::push(int i)
 {
 	spider *pMem = new spider(i);
 	int x;
-	pMem->setposition(rand() % 960, -50);
+	pMem->setposition(rand() % 800, -50);
 	pMem->setnext(pHead);
+	pHead->setprev(pMem);
 	pHead = pMem;
 }
 void spiderspawner::pop(int i)
 {
 	spider *pWalk = pHead, *pTemp, *pAft;
 	int j = 0;
-	while (pWalk->getid() != i)
+	while ((pWalk != nullptr) && (pWalk->getid() != i))
 	{
 		pWalk = pWalk->getnext();
 	}
-	pTemp = pWalk->getprev();
-	pTemp->setnext(pWalk->getnext());
-	pAft = pWalk->getnext();
-	pAft->setprev(pWalk->getprev());
-	delete pWalk;
+	if (pWalk != nullptr) {
+		if (pWalk == pHead)
+		{
+			pHead = pWalk->getnext();
+		}
+		else
+		{
+			pTemp = pWalk->getprev();
+			if (pWalk->getnext() != nullptr)
+			{
+				pTemp->setnext(pWalk->getnext());
+				pAft = pWalk->getnext();
+				pAft->setprev(pWalk->getprev());
+			}
+			else
+				pTemp->setnext(nullptr);
+		}
+		delete pWalk;
+	}
+	else {
+		cout << "pWalk cannot find i , dummy" << std::endl;
+	}
+}
+spider * spiderspawner::getpHead()
+{
+	return pHead;
+}
+void spiderspawner::setpHead(spider *newPointer)
+{
+	pHead = newPointer;
+}
+
+int spiderspawner::getSpiderRemaining()
+{
+	return mspiderRemaining;
+}
+
+void spiderspawner::setSpiderRemaining(int spiderRemaining)
+{
+	mspiderRemaining = spiderRemaining;
 }
 
 void spiderspawner::drawspiders(sf::RenderWindow &window)
 {
 	spider* pWalk = pHead;
 	int i = 0;
-	for (i = 0; i < size; i++)
+	for (i = 0; i < (mspiderRemaining); i++)
 	{
 		pWalk->draw(window);
 		pWalk = pWalk->getnext();

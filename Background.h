@@ -1,3 +1,4 @@
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
@@ -11,8 +12,8 @@ public:
 	~Background();
 
 	void setBabyBroPoisition(float x, float y);
-	sf::Vector2f getBabyBroPosition()
-	void drawBackground(sf::RenderWindow &window);
+	sf::Vector2f getBabyBroPosition();
+		void drawBackground(sf::RenderWindow &window);
 
 private:
 	sf::Sprite wallpaper;
@@ -35,7 +36,7 @@ Background::Background()
 }
 Background::~Background()
 {
-	
+
 }
 
 void Background::setBabyBroPoisition(float x, float y)
