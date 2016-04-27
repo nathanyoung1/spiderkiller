@@ -25,8 +25,7 @@ StartScreen::StartScreen() :Background()
 		initializeText(font, text, 300, 300, 70);
 		initializeText(font, startText, 650, 500);
 	}
-	text.setString("Save Your \nBaby Brother!");
-	startText.setString("Start");
+	startText.setString("Click to Start");
 }
 StartScreen::StartScreen(sf::RenderWindow &window) :Background()
 {
@@ -35,19 +34,24 @@ StartScreen::StartScreen(sf::RenderWindow &window) :Background()
 		initializeText(font, text, window.getPosition().x , window.getPosition().y - 50, 70);
 		initializeText(font, startText, window.getPosition().x + 20.0, window.getPosition().y + 10.0);
 	}
-	text.setString("Save Your Baby Brother!");
-	startText.setString("Start");
+	startText.setString("Click to Start");
 }
 StartScreen::~StartScreen()
 {
 
 }
 //draws a start Screen
-void StartScreen::drawStartScreen(sf::RenderWindow &window)
+void StartScreen::drawStartScreen(sf::RenderWindow &window, int level)
 {
 	drawBackground(window);
+	if (level < 4) {
+		text.setString("Level " + std::to_string(level));
+		window.draw(this->startText);
+	}
+	else {
+		text.setString("You Won All Levels!");
+	}
 	window.draw(this->text);
-	window.draw(this->startText);
 }
 //function to initialize the text easier
 //precondition: the Font must have opened correctly
